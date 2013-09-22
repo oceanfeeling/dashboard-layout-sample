@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DashboardButtons</string>
+    <string name="homedash_button_1">Button 1</string>
+    <string name="homedash_button_2">Button 2</string>
+    <string name="homedash_button_3">Button 3</string>
+    <string name="homedash_button_4">Button 4</string>
+    <string name="homedash_button_5">Button 5</string>
+    <string name="homedash_button_6">Button 6</string>
+    <string name="homedash_button_7">Button 7</string>
+    <string name="homedash_button_8">Button 8</string>
+    <string name="homedash_button_9">Button 9</string>
+    <string name="homedash_button_10">Button 10</string>
+    <string name="homedash_button_11">Button 11</string>
+    <string name="homedash_button_12">Button 12</string>
+    <string name="homedash_button_13">Button 13</string>
+    <string name="homedash_button_14">Button 14</string>
+    <string name="homedash_button_15">Button 15</string>
+    <string name="homedash_button_16">Button 16</string>
+    <string name="homedash_button_17">Button 17</string>
+</resources>

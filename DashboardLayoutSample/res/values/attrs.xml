@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <declare-styleable name="HomeButton">
+        <attr name="label" format="string" />
+        <attr name="buttonBackground" format="reference" />
+    </declare-styleable>
+
+    <attr name="homeDashboardButtonStyle" format="reference" />
+</resources>

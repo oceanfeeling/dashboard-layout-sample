@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <item type="id" name="home_btn_1" />
+    <item type="id" name="home_btn_2" />
+    <item type="id" name="home_btn_3" />
+    <item type="id" name="home_btn_4" />
+    <item type="id" name="home_btn_5" />
+    <item type="id" name="home_btn_6" />
+    <item type="id" name="home_btn_7" />
+    <item type="id" name="home_btn_8" />
+    <item type="id" name="home_btn_9" />
+    <item type="id" name="home_btn_10" />
+    <item type="id" name="home_btn_11" />
+    <item type="id" name="home_btn_12" />
+    <item type="id" name="home_btn_13" />
+    <item type="id" name="home_btn_14" />
+    <item type="id" name="home_btn_15" />
+    <item type="id" name="home_btn_16" />
+    <item type="id" name="home_btn_17" />
+</resources>
