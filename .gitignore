@@ -1,0 +1,55 @@
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+# ant generated files
+bin/
+gen/
+# gradle generated files
+out/
+build/
+gen-external-apklibs/
+
+# Local configuration file (sdk path, gradle properties, etc)
+local.properties
+gradle.properties
+
+# Eclipse project files
+.classpath
+.project
+.settings
+.metadata
+
+# IDEA/Android Studio project files, because
+# the project can be imported from settings.gradle
+.idea
+*.iml
+
+# Old-style IDEA project files
+*.ipr
+*.iws
+
+# Local IDEA workspace
+.idea/workspace.xml
+
+# Gradle cache
+.gradle
+
+# Helper maven script for making local artifacts 
+# and copying them to AndroidStudio projects
+aar-to-local-repo/repo/*
+aar-to-local-repo/*.bat
+
+# Sandbox stuff
+_sandbox
+
+# MacOS thumbnail db
+.DS_Store
+
