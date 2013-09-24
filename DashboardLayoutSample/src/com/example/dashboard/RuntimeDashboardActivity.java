@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class RuntimeDashboardActivity extends ActionBarActivity {
             new HomeButtonInfo(R.id.home_btn_6, R.string.homedash_button_6, R.drawable.ic_dashboard_button),
     };
 
-    private ArrayList<HomeButton> createButtons(Context context, View.OnClickListener listener) {
+    private ArrayList<HomeButton> createHomeButtons(Context context, View.OnClickListener listener) {
         ArrayList<HomeButton> buttons = new ArrayList<HomeButton>();
         for(int i = 0; i < sHomeButtonInfos.length; i++) {
             HomeButton btn = new HomeButton(context);
@@ -58,6 +59,21 @@ public class RuntimeDashboardActivity extends ActionBarActivity {
                     context.getResources().getDrawable(
                             sHomeButtonInfos[i].getIcon()));
             btn.setLabel(sHomeButtonInfos[i].getText());
+
+            buttons.add(btn);
+        }
+
+        return buttons;
+    }
+
+    private ArrayList<Button> createButtons(Context context, View.OnClickListener listener) {
+        ArrayList<Button> buttons = new ArrayList<Button>();
+        for(int i = 0; i < sHomeButtonInfos.length; i++) {
+            Button btn = new Button(context, null, R.attr.homeDashboardButtonStyle);
+            btn.setId(sHomeButtonInfos[i].getId());
+            btn.setBackgroundDrawable(context.getResources().getDrawable(
+                    sHomeButtonInfos[i].getIcon()));
+            btn.setText(sHomeButtonInfos[i].getText());
 
             buttons.add(btn);
         }
@@ -93,14 +109,12 @@ public class RuntimeDashboardActivity extends ActionBarActivity {
 
             container.addView(dashboard, position);
 
-            ArrayList<HomeButton> buttons = createButtons(mContext, mListener);
+            ArrayList<HomeButton> buttons = createHomeButtons(mContext, mListener);
             for(View button : buttons) {
                 dashboard.addView(button);
             }
 
-            //dashboard.requestLayout();
-
-
+            dashboard.requestLayout();
 
             return dashboard;
         }

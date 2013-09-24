@@ -17,5 +17,6 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.dashboard.StaticDashboardActivity"/>
+        <activity android:name="com.example.dashboard.RomansLayoutActivity"/>
     </application>
 </manifest>

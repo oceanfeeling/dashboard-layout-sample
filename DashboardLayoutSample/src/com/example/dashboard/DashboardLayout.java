@@ -20,9 +20,9 @@ public class DashboardLayout extends ViewGroup {
 	private int mMaxChildWidth = 0;
     private int mMaxChildHeight = 0;
     private int mPage;
-    private Mode mMode;
+    private Mode mMode = Mode.SEQUENTIAL_HALF_OFFSET;
 
-    private Callbacks mCallbacks;
+    private Callbacks mCallbacks = sCallbacks;
     private int mRenderedIcons;
 
     private static Callbacks sCallbacks = new Callbacks() {
@@ -31,90 +31,62 @@ public class DashboardLayout extends ViewGroup {
         }
     };
 
-	public DashboardLayout(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-        init();
-	}
-
-	public DashboardLayout(Context context, AttributeSet attrs) {
-		super(context, attrs);
-        init();
-	}
-
-	public DashboardLayout(Context context) {
-		super(context);
-        init();
-	}
-
-    private void init() {
-        mMode = Mode.SEQUENTIAL_HALF_OFFSET;
-        mCallbacks = sCallbacks;
+    public DashboardLayout(Context context) {
+        super(context);
     }
 
-	@SuppressWarnings("unused")
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		int mNewMaxChildWidth = 0;
-        int mNewMaxChildHeight = 0;
-        
-        
-		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-		int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-		int measureSpecWidth = MeasureSpec.getSize(widthMeasureSpec);
-		int measureSpecHeight = MeasureSpec.getSize(heightMeasureSpec);
-		
-		int paddingW = getPaddingLeft() + getPaddingRight();
-		int paddingH = getPaddingTop() + getPaddingBottom();
-		
-		// measure once to find the maximum child size
-		int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(measureSpecWidth, 
-				MeasureSpec.AT_MOST);
-		int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(measureSpecHeight, 
-				MeasureSpec.AT_MOST);
-		
-		final int total = getChildCount();
-		for(int i = 0; i < total; i++) {
-			View child = getChildAt(0);
-			if(child.getVisibility() == GONE) {
-				continue;
-			}
-			
-			child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
-			
-			mNewMaxChildWidth = Math.max(mNewMaxChildWidth, child.getMeasuredWidth());
-			Log.d("", "MaxChildWidth: " + mNewMaxChildWidth);
-			mNewMaxChildHeight = Math.max(mNewMaxChildHeight, child.getMeasuredHeight());
-			
-			if(mNewMaxChildWidth > mMaxChildWidth) {
-				mMaxChildWidth = mNewMaxChildWidth;
-			}
-			
-			if(mNewMaxChildHeight > mMaxChildHeight) {
-				mMaxChildHeight = mNewMaxChildHeight;
-			}
-		}
-		
-		// measure again for each child to be exactly the same size
-		childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(mMaxChildWidth, 
-				MeasureSpec.EXACTLY);
-		childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(mMaxChildHeight, 
-				MeasureSpec.EXACTLY);
-		
-		for(int i = 0; i < total; i++) {
-			View child = getChildAt(0);
-			if(child.getVisibility() == GONE) {
-				continue;
-			}
-			
-			child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
-		}
-		
-		setMeasuredDimension(
-				resolveSize(mMaxChildWidth, widthMeasureSpec),
-				resolveSize(mMaxChildHeight, heightMeasureSpec));
+    public DashboardLayout(Context context, AttributeSet attrs) {
+        super(context, attrs, 0);
+    }
+
+	public DashboardLayout(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
 	}
 
+    @SuppressWarnings("unused")
 	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        mMaxChildWidth = 0;
+        mMaxChildHeight = 0;
+
+        final int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
+                MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.AT_MOST);
+        final int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(
+                MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.AT_MOST);
+
+        final int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            final View child = getChildAt(i);
+            if (child.getVisibility() == GONE) {
+                continue;
+            }
+
+            child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+
+            mMaxChildWidth = Math.max(mMaxChildWidth, child.getMeasuredWidth());
+            mMaxChildHeight = Math.max(mMaxChildHeight, child.getMeasuredHeight());
+        }
+
+        int w = resolveSize(mMaxChildWidth, widthMeasureSpec);
+        int h = resolveSize(mMaxChildHeight, heightMeasureSpec);
+
+        Log.i("DashboardLayout", "w:" + w + ", h:" + h);
+
+        setMeasuredDimension(w, h);
+	}
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        post(new Runnable() {
+            @Override
+            public void run() {
+                requestLayout();
+                invalidate();
+            }
+        });
+    }
+
+    @Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		if(mMode == Mode.SEQUENTIAL) {
             onLayoutSequential(changed, l, t, r, b);
@@ -225,15 +197,14 @@ public class DashboardLayout extends ViewGroup {
         int vertSpacing = 0;
 
         // the minimum required padding between icons
-        int minHorzPadding = (int) (mMaxChildWidth) / 2;
-        int minVertPadding = (int) (mMaxChildHeight) / 2;
+        int minHorzPadding = (int) (mMaxChildWidth);
+        int minVertPadding = (int) (mMaxChildHeight);
 
         // horizontal resolution
         int cols = 1;
         while(true) {
             int spacing = (width - cols * mMaxChildWidth) / cols;
             if(spacing < minHorzPadding) {
-                horzSpacing = spacing;
                 break;
             } else {
                 cols++;
@@ -245,7 +216,6 @@ public class DashboardLayout extends ViewGroup {
         while(true) {
             int spacing = (height - (rows * mMaxChildHeight)) / rows;
             if(spacing < minVertPadding) {
-                vertSpacing = spacing;
                 break;
             } else {
                 rows++;
